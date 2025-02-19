@@ -1,10 +1,10 @@
 /*
     Making a similar API to Rust's Result
 */
-#include <iostream>
+/*#include <iostream>*/
 #include <variant>
-#include <typeinfo>
-#include <cstdlib>
+/*#include <typeinfo>*/
+/*#include <cstdlib>*/
 
 template <typename V, typename E>
 class Result {
@@ -26,7 +26,7 @@ public:
         if (this->is_ok()) {
             return std::get<V>(this->__result);
         }
-        std::cout << "Error: Unwrapping a failed result!" << std::endl;
+        std::cerr << "Error: Unwrapping a failed result!" << std::endl;
         exit(1); // Exit the program on error (like panicking in Rust)
     }
 
@@ -35,7 +35,7 @@ public:
         if (this->is_err()) {
             return std::get<E>(this->__result);
         }
-        std::cout << "Error: Unwrapping a successful result!" << std::endl;
+        std::cerr << "Error: Unwrapping a successful result!" << std::endl;
         exit(1); // Exit the program on error
     }
 };
