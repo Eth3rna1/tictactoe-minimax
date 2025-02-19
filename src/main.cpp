@@ -14,9 +14,6 @@
 #include <stdexcept>
 /*#include <optional>*/
 
-const int WIDTH = 3;
-const int LENGTH = 3;
-
 std::string input(auto& prompt) {
     std::cout << prompt;
     std::string response;
