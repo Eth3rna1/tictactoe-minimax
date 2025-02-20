@@ -56,7 +56,7 @@ public:
         return true;
     }
 
-    std::vector<std::tuple<int, int>> getAllPossibleMoves() {
+    std::vector<std::tuple<int, int>> getAllPossibleMoves() const {
         std::vector<std::tuple<int, int>> moves;
         for (int row = 0; row < 3; ++row) {
             for (int col = 0; col < 3; ++col) {
@@ -69,10 +69,8 @@ public:
     }
 
     int getStateScore() const {
-        if (planeHasBeenFilled()) {
-            if (hasBeenWon()) {
-                return getPreviousPlayer() == 'X' ? 1 : -1;
-            }
+        if (hasBeenWon()) {
+            return getPreviousPlayer() == 'X' ? 1 : -1;
         }
         // means a tie or game is not over yet
         return 0;
@@ -86,13 +84,13 @@ public:
             return true;
         }
         // horizontal wins
-        for (int row = 0; row < 2; ++row) {
+        for (int row = 0; row < 3; ++row) {
             if (__plane[row][0] != ' ' && __plane[row][0] == __plane[row][1] && __plane[row][1] == __plane[row][2]) {
                 return true;
             }
         }
         // vertical wins
-        for (int col = 0; col < 2; ++col) {
+        for (int col = 0; col < 3; ++col) {
             if (__plane[0][col] != ' ' && __plane[0][col] == __plane[1][col] && __plane[1][col] == __plane[2][col]) {
                 return true;
             }
