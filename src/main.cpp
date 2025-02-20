@@ -21,7 +21,7 @@ std::string input(auto& prompt) {
     return response;
 }
 
-void clear() {
+constexpr void clear() {
     std::cout << "\x1B[2J\x1B[1;1H";
 }
 
@@ -58,7 +58,7 @@ void multiplayer() {
     clear();
     std::cout << "Provide coordinate with {NUMBER}{LETTER}.\n";
     std::cout << game.display() << std::endl;
-    while (!game.hasBeenWonned()) {
+    while (!game.planeHasBeenFilled()) {
         std::cout << '\n' << "Its player '" << game.getCurrentPlayer() << "' turn" << std::endl;
         std::string selection = input("Coordinate: ");
         auto result = parse_input(selection);
@@ -75,6 +75,57 @@ void multiplayer() {
                 std::cerr << result.unwrap_err() << std::endl;
                 continue;
             }
+            game = result.unwrap();
+        }
+        clear();
+        std::cout << "Provide coordinate with {NUMBER}{LETTER}.\n";
+        std::cout << game.display() << std::endl;
+    }
+    if (game.hasBeenWon()) {
+        std::cout << "'" << game.getPreviousPlayer() << "' player has won!" << std::endl;
+    } else {
+        std::cout << "It's a tie" << std::endl;
+    }
+}
+
+void solo() {
+    TicTacToe game;
+    clear();
+    std::cout << "Provide coordinate with {NUMBER}{LETTER}.\n";
+    std::cout << game.display() << std::endl;
+    while (!game.hasBeenWon()) {
+        char current_player = game.getCurrentPlayer();
+        std::cout << '\n' << "Its player '" << current_player << "' turn" << std::endl;
+        if (current_player == 'O') { // O is human player
+            std::string selection = input("Coordinate: ");
+            auto result = parse_input(selection);
+            if (result.is_err()) {
+                std::cerr << result.unwrap_err() << std::endl;
+                continue;
+            }
+            int row;
+            int col;
+            std::tie(row, col) = result.unwrap();
+            {
+                auto result = game.place(row, col);
+                if (result.is_err()) {
+                    std::cerr << result.unwrap_err() << std::endl;
+                    continue;
+                }
+                game = result.unwrap();
+            }
+        } else { // ai player, which is X
+            int score;
+            std::optional<COORDINATE> best_move;
+            std::tie(score, best_move) = minimax(game, 9, true);
+            int row;
+            int col;
+            if (!best_move.has_value()) {
+                continue;
+            }
+            std::tie(row, col) = best_move.value();
+            TicTacToe updated_game_state = game.place(row, col).unwrap();
+            game = updated_game_state;
         }
         clear();
         std::cout << "Provide coordinate with {NUMBER}{LETTER}.\n";
@@ -83,13 +134,8 @@ void multiplayer() {
     std::cout << "'" << game.getPreviousPlayer() << "' player has won!" << std::endl;
 }
 
-void solo() {
-    TicTacToe game;
-    throw std::runtime_error("Haven implemented the solo game mode!");
-}
-
 std::string getGameMode() {
-    std::vector<std::string> opts = {"multiplayer", "solo"};
+    std::vector<std::string> opts = {"soloplayer", "multiplayer"};
     Options options(opts);
     while (true) {
         std::cout << options.display() << std::endl;
@@ -107,7 +153,7 @@ int main() {
     std::string game_mode = getGameMode();
     if (game_mode == "multiplayer") {
         multiplayer();
-    } else if (game_mode == "solo") {
+    } else if (game_mode == "soloplayer") {
         solo();
     }
     return 0;

@@ -1,14 +1,14 @@
+#include <vector>
 #include "result.h"
 
 
 class TicTacToe {
-    /*std::array<std::array<uint8, LENGTH>, WIDTH> __plane;*/
     int __plane[3][3];
     char __player;
 
 public:
-    TicTacToe() {
-        __player = 'X';
+    TicTacToe() : __player('O') {
+        // X is the maximizer, O is the minimizer
         for (int r = 0; r < 3; r++) {
             for (int c = 0; c < 3; c++) {
                 __plane[r][c] = ' ';
@@ -16,25 +16,69 @@ public:
         }
     }
 
-    Result<int, std::string> place(int row, int col) {
+    Result<TicTacToe, std::string> place(int row, int col) {
+        using namespace std;
         if (__plane[row][col] == 'O' || __plane[row][col] == 'X') {
             return std::string("Coordinate has already been placed");
         }
-        if (__player == 'X') {
-            __plane[row][col] = 'X';
-            __player = 'O';
-        } else {
-            __plane[row][col] = 'O';
-            __player = 'X';
+        TicTacToe game;
+        {
+            // update the values within the game instantiation
+            for (int r = 0; r < 3; ++r) {
+                for (int c = 0; c < 3; ++c) {
+                    /*cout << r << " " << c << '\n';*/
+                    game.__plane[r][c] = __plane[r][c];
+                }
+            }
         }
-        return 0;
+        if (__player == 'X') {
+            game.__plane[row][col] = 'X';
+            game.__player = 'O';
+        } else {
+            game.__plane[row][col] = 'O';
+            game.__player = 'X';
+        }
+        return game;
     }
 
     char getCurrentPlayer() const {
         return __player;
     }
 
-    bool hasBeenWonned() const {
+    bool planeHasBeenFilled() const {
+        for (int r = 0; r < 3; ++r) {
+            for (int c = 0; c < 3; ++c) {
+                if (__plane[r][c] == ' ') {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    std::vector<std::tuple<int, int>> getAllPossibleMoves() {
+        std::vector<std::tuple<int, int>> moves;
+        for (int row = 0; row < 3; ++row) {
+            for (int col = 0; col < 3; ++col) {
+                if (__plane[row][col] == ' ') {
+                    moves.push_back(std::make_tuple(row, col));
+                }
+            }
+        }
+        return moves;
+    }
+
+    int getStateScore() const {
+        if (planeHasBeenFilled()) {
+            if (hasBeenWon()) {
+                return getPreviousPlayer() == 'X' ? 1 : -1;
+            }
+        }
+        // means a tie or game is not over yet
+        return 0;
+    }
+
+    bool hasBeenWon() const {
         // diagonal wins
         if (__plane[0][0] != ' ' && __plane[0][0] == __plane[1][1] && __plane[1][1] == __plane[2][2]) {
             return true;
@@ -57,10 +101,7 @@ public:
     }
 
     char getPreviousPlayer() const {
-        if (__player == 'X') {
-            return 'O';
-        }
-        return 'X';
+        return __player == 'X' ? 'O' : 'X';
     }
 
     std::string display() const {
