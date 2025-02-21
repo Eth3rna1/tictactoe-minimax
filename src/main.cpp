@@ -31,7 +31,7 @@
  *
  * Usage: 
  * To compile the program, use the following command:
- * g++ main.cpp -o tictactoe.exe
+ * g++ src/main.cpp -o tictactoe.exe
  * 
  * To run the program, execute:
  * tictactoe.exe
