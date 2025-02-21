@@ -23,35 +23,35 @@
 // and stores the error case within a value instead of playing throw and catch
 template <typename V, typename E>
 class Result {
-    std::variant<V, E> __result;
+    std::variant<V, E> m_result;
 
 public:
-    Result(const V& val) : __result(val) {}  // Success case
-    Result(const E& err) : __result(err) {} // Error case
+    Result(const V& val) : m_result(val) {}  // Success case
+    Result(const E& err) : m_result(err) {} // Error case
 
     // checks if the value is the success case
-    bool is_ok() const {
-        return std::holds_alternative<V>(this->__result);
+    bool isOk() const {
+        return std::holds_alternative<V>(this->m_result);
     }
 
     // checks if the value is the error case
-    bool is_err() const {
-        return std::holds_alternative<E>(this->__result);
+    bool isErr() const {
+        return std::holds_alternative<E>(this->m_result);
     }
 
     // returns success case's value
     V unwrap() const {
-        if (this->is_ok()) {
-            return std::get<V>(this->__result);
+        if (this->isOk()) {
+            return std::get<V>(this->m_result);
         }
         throw std::runtime_error("Error: Unwrapping a failed result!");
         exit(1); // Exit the program on error (like panicking in Rust)
     }
 
     // returns the error value
-    E unwrap_err() const {
-        if (this->is_err()) {
-            return std::get<E>(this->__result);
+    E unwrapErr() const {
+        if (this->isErr()) {
+            return std::get<E>(this->m_result);
         }
         throw std::runtime_error("Error: Unwrapping a successful result!");
         exit(1); // Exit the program on error

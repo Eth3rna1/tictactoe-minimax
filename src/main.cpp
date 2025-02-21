@@ -49,7 +49,7 @@
 #include "../include/tictactoe.h"
 
 // game if multiplayer is chosen
-void multiplayer() {
+void multiPlayer() {
     TicTacToe game;
     std::string banner = "Provide coordinate: {NUMBER}{LETTER}";
     while (true) {
@@ -61,17 +61,17 @@ void multiplayer() {
         }
         std::cout << '\n' << "Its player '" << game.getCurrentPlayer() << "' turn" << std::endl;
         std::string selection = input("Coordinate: ");
-        Result<std::tuple<int, int>, std::string> input_result = parse_input(selection);
-        if (input_result.is_err()) {
-            banner = input_result.unwrap_err();
+        Result<std::tuple<int, int>, std::string> input_result = parseInput(selection);
+        if (input_result.isErr()) {
+            banner = input_result.unwrapErr();
             continue;
         }
         int row;
         int col;
         std::tie(row, col) = input_result.unwrap();
         Result<TicTacToe, std::string> result = game.place(row, col);
-        if (result.is_err()) {
-            banner = result.unwrap_err();
+        if (result.isErr()) {
+            banner = result.unwrapErr();
             continue;
         }
         game = result.unwrap();
@@ -84,7 +84,7 @@ void multiplayer() {
 }
 
 // Game if soloplayer is chosen
-void soloplayer() {
+void soloPlayer() {
     TicTacToe game;
     std::string banner = "Provide coordinate: {NUMBER}{LETTER}";
     while (true) {
@@ -98,17 +98,17 @@ void soloplayer() {
         std::cout << '\n' << "Its player '" << current_player << "' turn" << std::endl;
         if (current_player == 'O') { // O is human player
             std::string selection = input("Coordinate: ");
-            Result<std::tuple<int, int>, std::string> input_result = parse_input(selection);
-            if (input_result.is_err()) {
-                banner = input_result.unwrap_err();
+            Result<std::tuple<int, int>, std::string> input_result = parseInput(selection);
+            if (input_result.isErr()) {
+                banner = input_result.unwrapErr();
                 continue;
             }
             int row;
             int col;
             std::tie(row, col) = input_result.unwrap();
             Result<TicTacToe, std::string> result = game.place(row, col);
-            if (result.is_err()) {
-                banner = result.unwrap_err();
+            if (result.isErr()) {
+                banner = result.unwrapErr();
                 continue;
             }
             game = result.unwrap();
@@ -137,11 +137,11 @@ int main() {
     while (true) {
         std::string game_mode = getGameMode();
         if (game_mode == "multiplayer") {
-            multiplayer();
+            multiPlayer();
         } else if (game_mode == "soloplayer") {
-            soloplayer();
+            soloPlayer();
         }
-        if (!confirm_prompt("Replay?", false)) {
+        if (!confirmPrompt("Replay?", false)) {
             break;
         }
     }

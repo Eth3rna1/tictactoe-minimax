@@ -24,16 +24,16 @@
 
 // Tic-Tac-Toe game instance
 class TicTacToe {
-    int __plane[3][3];
-    char __player;
+    int m_plane[3][3];
+    char m_player;
 
 public:
     // Constructor: player `O` is always the starting player
-    TicTacToe() : __player('O') {
+    TicTacToe() : m_player('O') {
         // X is the maximizer, O is the minimizer
         for (int r = 0; r < 3; r++) {
             for (int c = 0; c < 3; c++) {
-                __plane[r][c] = ' ';
+                m_plane[r][c] = ' ';
             }
         }
     }
@@ -43,7 +43,7 @@ public:
     // been populated, it will return a string containing what went wrong
     Result<TicTacToe, std::string> place(int row, int col) {
         using namespace std;
-        if (__plane[row][col] == 'O' || __plane[row][col] == 'X') {
+        if (m_plane[row][col] == 'O' || m_plane[row][col] == 'X') {
             return std::string("Coordinate has already been placed");
         }
         TicTacToe game;
@@ -52,29 +52,29 @@ public:
             for (int r = 0; r < 3; ++r) {
                 for (int c = 0; c < 3; ++c) {
                     /*cout << r << " " << c << '\n';*/
-                    game.__plane[r][c] = __plane[r][c];
+                    game.m_plane[r][c] = m_plane[r][c];
                 }
             }
         }
-        if (__player == 'X') {
-            game.__plane[row][col] = 'X';
-            game.__player = 'O';
+        if (m_player == 'X') {
+            game.m_plane[row][col] = 'X';
+            game.m_player = 'O';
         } else {
-            game.__plane[row][col] = 'O';
-            game.__player = 'X';
+            game.m_plane[row][col] = 'O';
+            game.m_player = 'X';
         }
         return game;
     }
 
     // Returns the current player ('X' or 'O')
     char getCurrentPlayer() const {
-        return __player;
+        return m_player;
     }
 
     bool planeHasBeenFilled() const {
         for (int r = 0; r < 3; ++r) {
             for (int c = 0; c < 3; ++c) {
-                if (__plane[r][c] == ' ') {
+                if (m_plane[r][c] == ' ') {
                     return false;
                 }
             }
@@ -88,7 +88,7 @@ public:
         std::vector<std::tuple<int, int>> moves;
         for (int row = 0; row < 3; ++row) {
             for (int col = 0; col < 3; ++col) {
-                if (__plane[row][col] == ' ') {
+                if (m_plane[row][col] == ' ') {
                     moves.push_back(std::make_tuple(row, col));
                 }
             }
@@ -110,20 +110,20 @@ public:
     // Checks for diagonal, vertical, horizontal wins
     bool hasBeenWon() const {
         // diagonal wins
-        if (__plane[0][0] != ' ' && __plane[0][0] == __plane[1][1] && __plane[1][1] == __plane[2][2]) {
+        if (m_plane[0][0] != ' ' && m_plane[0][0] == m_plane[1][1] && m_plane[1][1] == m_plane[2][2]) {
             return true;
-        } else if (__plane[0][2] != ' ' && __plane[0][2] == __plane[1][1] && __plane[1][1] == __plane[2][0]) {
+        } else if (m_plane[0][2] != ' ' && m_plane[0][2] == m_plane[1][1] && m_plane[1][1] == m_plane[2][0]) {
             return true;
         }
         // horizontal wins
         for (int row = 0; row < 3; ++row) {
-            if (__plane[row][0] != ' ' && __plane[row][0] == __plane[row][1] && __plane[row][1] == __plane[row][2]) {
+            if (m_plane[row][0] != ' ' && m_plane[row][0] == m_plane[row][1] && m_plane[row][1] == m_plane[row][2]) {
                 return true;
             }
         }
         // vertical wins
         for (int col = 0; col < 3; ++col) {
-            if (__plane[0][col] != ' ' && __plane[0][col] == __plane[1][col] && __plane[1][col] == __plane[2][col]) {
+            if (m_plane[0][col] != ' ' && m_plane[0][col] == m_plane[1][col] && m_plane[1][col] == m_plane[2][col]) {
                 return true;
             }
         }
@@ -132,7 +132,7 @@ public:
 
     // Returns the previous instance of player (`X` or `O`)
     char getPreviousPlayer() const {
-        return __player == 'X' ? 'O' : 'X';
+        return m_player == 'X' ? 'O' : 'X';
     }
 
     // Displays the Tic Tac Toe UI with its labels regarding
@@ -146,7 +146,7 @@ public:
             buffer += " ";
             for (int col = 0; col < 3; ++col) {
                 line += " ";
-                line += __plane[row][col];
+                line += m_plane[row][col];
                 line += " ";
                 if (col < 2) {
                     line += "|";

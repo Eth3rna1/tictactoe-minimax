@@ -24,12 +24,12 @@
 // A class that works with the UI, listing all available
 // options and deals with user selection to evaluate list selection
 class Options {
-    std::unordered_map<std::string, std::string> __values;
+    std::unordered_map<std::string, std::string> m_values;
 
 public:
     Options(std::vector<std::string>& values) {
         for (int i=0; i < values.size(); ++i) {
-            __values[std::to_string(i + 1)] = values[i];
+            m_values[std::to_string(i + 1)] = values[i];
         }
     }
 
@@ -37,10 +37,10 @@ public:
     // have all the clients options on a list
     std::string display() const {
         std::string buffer = "";
-        int size = __values.size();
+        int size = m_values.size();
         for (int i=0; i < size; ++i) {
             std::string str_index = std::to_string(i + 1);
-            buffer += str_index + ".) " + __values.at(str_index);
+            buffer += str_index + ".) " + m_values.at(str_index);
             if (i < size - 1) {
                 buffer += '\n';
             }
@@ -52,7 +52,7 @@ public:
     // returning the value corresponding to the key, if not, checks
     // for the values, if values match, returns such value
     std::optional<std::string> eval(std::string v) {
-        for (const auto& pair : __values) {
+        for (const auto& pair : m_values) {
             if (pair.first == v) {
                 return pair.second;
             } else if (pair.second == v) {

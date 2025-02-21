@@ -24,10 +24,10 @@ std::tuple<int, std::optional<std::tuple<int, int>>> minimax(TicTacToe& state, i
         return std::make_tuple(state.getStateScore(), std::nullopt);
     }
 
-    std::optional<std::tuple<int, int>> bestMove;
+    std::optional<std::tuple<int, int>> best_move;
     
     if (isMaximizing) {
-        int maxEval = -1; // Worst case for maximizing
+        int max_eval = -1; // Worst case for maximizing
         for (const std::tuple<int, int>& move : state.getAllPossibleMoves()) {
             int row, col;
             std::tie(row, col) = move;
@@ -37,14 +37,14 @@ std::tuple<int, std::optional<std::tuple<int, int>>> minimax(TicTacToe& state, i
             std::optional<std::tuple<int, int>> _;
             std::tie(score, _) = minimax(new_board, depth - 1, false);
 
-            if (score > maxEval) {
-                maxEval = score;
-                bestMove = move;
+            if (score > max_eval) {
+                max_eval = score;
+                best_move = move;
             }
         }
-        return std::make_tuple(maxEval, bestMove);
+        return std::make_tuple(max_eval, best_move);
     } else {
-        int minEval = 1; // Worst case for minimizing
+        int min_eval = 1; // Worst case for minimizing
         for (const std::tuple<int, int>& move : state.getAllPossibleMoves()) {
             int row, col;
             std::tie(row, col) = move;
@@ -54,12 +54,12 @@ std::tuple<int, std::optional<std::tuple<int, int>>> minimax(TicTacToe& state, i
             std::optional<std::tuple<int, int>> _;
             std::tie(score, _) = minimax(new_board, depth - 1, true);
 
-            if (score < minEval) {
-                minEval = score;
-                bestMove = move;
+            if (score < min_eval) {
+                min_eval = score;
+                best_move = move;
             }
         }
-        return std::make_tuple(minEval, bestMove);
+        return std::make_tuple(min_eval, best_move);
     }
 }
 

@@ -41,7 +41,7 @@ std::string input(const std::string& prompt) {
 
 
 // Outputs a prompt that needs boolean input before returning such input as true or false
-bool confirm_prompt(const std::string& prompt, bool default_bool) {
+bool confirmPrompt(const std::string& prompt, bool default_bool) {
     std::string new_prompt = prompt;
     default_bool ? new_prompt += " [Y/N] (DEFAULT=Y): " : new_prompt += " [Y/N] (DEFAULT=N): ";
     while (true) {
@@ -61,7 +61,7 @@ bool confirm_prompt(const std::string& prompt, bool default_bool) {
 
 // After making a selection on coordinate regarding the Tic Tac Toe game,
 // the function will translate the input into numerical x and y coordiantes
-Result<std::tuple<int, int>, std::string> parse_input(const std::string& response) {
+Result<std::tuple<int, int>, std::string> parseInput(const std::string& response) {
     if (response.empty()) {
         return std::string("Please provide a coordiante");
     }
