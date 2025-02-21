@@ -51,7 +51,6 @@
 // game if multiplayer is chosen
 void multiplayer() {
     TicTacToe game;
-    clear();
     std::string banner = "Provide coordinate: {NUMBER}{LETTER}";
     while (true) {
         clear();
@@ -87,7 +86,6 @@ void multiplayer() {
 // Game if soloplayer is chosen
 void soloplayer() {
     TicTacToe game;
-    clear();
     std::string banner = "Provide coordinate: {NUMBER}{LETTER}";
     while (true) {
         clear();
