@@ -1,12 +1,34 @@
+// Filename: tictactoe.h
+//
+// Author: Gabriel Mendieta Hernandez <gmendieta4109@gmail.com>
+//
+// Date: 2/20/2025
+//
+// Description: This file contains TicTacToe's API.
+//
+// License: This file is licensed under the MIT License.
+//          See the LICENSE file for more details.
+//
+// Dependencies:
+//    System Headers: 
+//        - <vector>     // Functionality to store a success or error value
+//
+//    Local Headers:
+//        - "result.h"   // Used for type safety, to efficiently handle error cases
+#ifndef TICTACTOE_H
+#define TICTACTOE_H
+
 #include <vector>
 #include "result.h"
 
 
+// Tic-Tac-Toe game instance
 class TicTacToe {
     int __plane[3][3];
     char __player;
 
 public:
+    // Constructor: player `O` is always the starting player
     TicTacToe() : __player('O') {
         // X is the maximizer, O is the minimizer
         for (int r = 0; r < 3; r++) {
@@ -16,6 +38,9 @@ public:
         }
     }
 
+    // Returns a Result, success being another instance of TicTacToe.
+    // If an error occurs, such like trying to place a piece where its
+    // been populated, it will return a string containing what went wrong
     Result<TicTacToe, std::string> place(int row, int col) {
         using namespace std;
         if (__plane[row][col] == 'O' || __plane[row][col] == 'X') {
@@ -41,6 +66,7 @@ public:
         return game;
     }
 
+    // Returns the current player ('X' or 'O')
     char getCurrentPlayer() const {
         return __player;
     }
@@ -56,6 +82,8 @@ public:
         return true;
     }
 
+    // Returns a vector of coordiantes where such positions are empty, or have
+    // not been populated
     std::vector<std::tuple<int, int>> getAllPossibleMoves() const {
         std::vector<std::tuple<int, int>> moves;
         for (int row = 0; row < 3; ++row) {
@@ -68,6 +96,9 @@ public:
         return moves;
     }
 
+    // If player `X` has won, the function will return the state score of 1,
+    // else returns -1, indicating a loss, if a tie occurs or the game is
+    // still being played, returns 0, indicating a neutral state
     int getStateScore() const {
         if (hasBeenWon()) {
             return getPreviousPlayer() == 'X' ? 1 : -1;
@@ -76,6 +107,7 @@ public:
         return 0;
     }
 
+    // Checks for diagonal, vertical, horizontal wins
     bool hasBeenWon() const {
         // diagonal wins
         if (__plane[0][0] != ' ' && __plane[0][0] == __plane[1][1] && __plane[1][1] == __plane[2][2]) {
@@ -98,10 +130,13 @@ public:
         return false;
     }
 
+    // Returns the previous instance of player (`X` or `O`)
     char getPreviousPlayer() const {
         return __player == 'X' ? 'O' : 'X';
     }
 
+    // Displays the Tic Tac Toe UI with its labels regarding
+    // its X coordiantes and Y coordiantes
     std::string display() const {
         std::string buffer = "";
         char letters[3] = {'a', 'b', 'c'};
@@ -109,7 +144,6 @@ public:
         for (int row = 0; row < 3; ++row) {
             buffer += std::to_string(row + 1);
             buffer += " ";
-            /*buffer += " | | ";*/
             for (int col = 0; col < 3; ++col) {
                 line += " ";
                 line += __plane[row][col];
@@ -128,3 +162,5 @@ public:
         return buffer;
     }
 };
+
+#endif
