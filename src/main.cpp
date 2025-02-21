@@ -134,11 +134,16 @@ void soloplayer() {
 }
 
 int main() {
-    std::string game_mode = getGameMode();
-    if (game_mode == "multiplayer") {
-        multiplayer();
-    } else if (game_mode == "soloplayer") {
-        soloplayer();
+    while (true) {
+        std::string game_mode = getGameMode();
+        if (game_mode == "multiplayer") {
+            multiplayer();
+        } else if (game_mode == "soloplayer") {
+            soloplayer();
+        }
+        if (!confirm_prompt("Replay?", false)) {
+            break;
+        }
     }
     return 0;
 }

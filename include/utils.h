@@ -32,16 +32,36 @@ void clear() {
 }
 
 // Outputs the prompt before receiving user input
-std::string input(auto& prompt) {
+std::string input(const std::string& prompt) {
     std::cout << prompt;
     std::string response;
     std::getline(std::cin, response);
     return response;
 }
 
+
+// Outputs a prompt that needs boolean input before returning such input as true or false
+bool confirm_prompt(const std::string& prompt, bool default_bool) {
+    std::string new_prompt = prompt;
+    default_bool ? new_prompt += " [Y/N] (DEFAULT=Y): " : new_prompt += " [Y/N] (DEFAULT=N): ";
+    while (true) {
+        std::string response = input(new_prompt);
+        switch (response.length()) {
+            case 0:
+                return default_bool;
+            case 1:
+                char choice = std::tolower(response[0]);
+                if (choice != 'y' && choice != 'n') {
+                    continue;
+                }
+                return choice == 'y' ? true : false;
+        }
+    }
+}
+
 // After making a selection on coordinate regarding the Tic Tac Toe game,
 // the function will translate the input into numerical x and y coordiantes
-Result<std::tuple<int, int>, std::string> parse_input(std::string& response) {
+Result<std::tuple<int, int>, std::string> parse_input(const std::string& response) {
     if (response.empty()) {
         return std::string("Please provide a coordiante");
     }
@@ -52,6 +72,9 @@ Result<std::tuple<int, int>, std::string> parse_input(std::string& response) {
         return std::string("Please provide a numerical value, then a letter value: {1-3}{a-b}");
     }
     int row = std::stoi(std::string(1, response[0]));
+    if (1 > row || row > 3) {
+        return std::string("Invalid range: {1-3}");
+    }
     int col;
     switch (std::tolower(response[1])) {
         case 'a':
@@ -64,7 +87,7 @@ Result<std::tuple<int, int>, std::string> parse_input(std::string& response) {
             col = 2;
             break;
         default:
-            return std::string("Invalid column");
+            return std::string("Invalid column: {a-c}");
     }
     return std::make_tuple(row - 1, col);
 };
