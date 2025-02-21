@@ -9,7 +9,7 @@
  *
  * Date Created: 2/17/2025
  *
- * Last Modified: 2/20/2025
+ * Last Modified: 2/21/2025
  *
  * Version: 0.0.1
  *
@@ -42,55 +42,11 @@
 #include <tuple>
 #include <iostream>
 #include <optional>
-#include "result.h"
-#include "minimax.h"
-#include "options.h"
-#include "tictactoe.h"
-
-
-// Clears the terminal screen
-void clear() {
-    std::cout << "\x1B[2J\x1B[1;1H";
-}
-
-// Outputs the prompt before receiving user input
-std::string input(auto& prompt) {
-    std::cout << prompt;
-    std::string response;
-    std::getline(std::cin, response);
-    return response;
-}
-
-
-// After making a selection on coordinate regarding the Tic Tac Toe game,
-// the function will translate the input into numerical x and y coordiantes
-Result<std::tuple<int, int>, std::string> parse_input(std::string& response) {
-    if (response.empty()) {
-        return std::string("Please provide a coordiante");
-    }
-    if (response.length() != 2) {
-        return std::string("Please provide a valid input, {1-3}{a-c}");
-    }
-    if (!isdigit(response[0])) {
-        return std::string("Please provide a numerical value, then a letter value: {1-3}{a-b}");
-    }
-    int row = std::stoi(std::string(1, response[0]));
-    int col;
-    switch (std::tolower(response[1])) {
-        case 'a':
-            col = 0;
-            break;
-        case 'b':
-            col = 1;
-            break;
-        case 'c':
-            col = 2;
-            break;
-        default:
-            return std::string("Invalid column");
-    }
-    return std::make_tuple(row - 1, col);
-};
+#include "../include/utils.h"
+#include "../include/result.h"
+#include "../include/minimax.h"
+#include "../include/options.h"
+#include "../include/tictactoe.h"
 
 // game if multiplayer is chosen
 void multiplayer() {
@@ -106,22 +62,20 @@ void multiplayer() {
         }
         std::cout << '\n' << "Its player '" << game.getCurrentPlayer() << "' turn" << std::endl;
         std::string selection = input("Coordinate: ");
-        Result<std::tuple<int, int>, std::string> result = parse_input(selection);
-        if (result.is_err()) {
-            banner = result.unwrap_err();
+        Result<std::tuple<int, int>, std::string> input_result = parse_input(selection);
+        if (input_result.is_err()) {
+            banner = input_result.unwrap_err();
             continue;
         }
         int row;
         int col;
-        std::tie(row, col) = result.unwrap();
-        {
-            Result<TicTacToe, std::string> result = game.place(row, col);
-            if (result.is_err()) {
-                banner = result.unwrap_err();
-                continue;
-            }
-            game = result.unwrap();
+        std::tie(row, col) = input_result.unwrap();
+        Result<TicTacToe, std::string> result = game.place(row, col);
+        if (result.is_err()) {
+            banner = result.unwrap_err();
+            continue;
         }
+        game = result.unwrap();
     }
     if (game.hasBeenWon()) {
         std::cout << "'" << game.getPreviousPlayer() << "' player has won!" << std::endl;
@@ -146,22 +100,20 @@ void soloplayer() {
         std::cout << '\n' << "Its player '" << current_player << "' turn" << std::endl;
         if (current_player == 'O') { // O is human player
             std::string selection = input("Coordinate: ");
-            Result<std::tuple<int, int>, std::string> result = parse_input(selection);
-            if (result.is_err()) {
-                banner = result.unwrap_err();
+            Result<std::tuple<int, int>, std::string> input_result = parse_input(selection);
+            if (input_result.is_err()) {
+                banner = input_result.unwrap_err();
                 continue;
             }
             int row;
             int col;
-            std::tie(row, col) = result.unwrap();
-            {
-                Result<TicTacToe, std::string> result = game.place(row, col);
-                if (result.is_err()) {
-                    banner = result.unwrap_err();
-                    continue;
-                }
-                game = result.unwrap();
+            std::tie(row, col) = input_result.unwrap();
+            Result<TicTacToe, std::string> result = game.place(row, col);
+            if (result.is_err()) {
+                banner = result.unwrap_err();
+                continue;
             }
+            game = result.unwrap();
         } else { // ai player, which is X
             int _;
             std::optional<std::tuple<int, int>> best_move;
@@ -180,21 +132,6 @@ void soloplayer() {
         std::cout << "'" << game.getPreviousPlayer() << "' player has won!" << std::endl;
     } else {
         std::cout << "It's a tie" << std::endl;
-    }
-}
-
-std::string getGameMode() {
-    std::vector<std::string> opts({"soloplayer", "multiplayer"});
-    Options options(opts);
-    while (true) {
-        std::cout << options.display() << std::endl;
-        std::string choice = input("\nChoice: ");
-        std::optional<std::string> result = options.eval(choice);
-        if (result.has_value()) {
-            return result.value();
-        } else {
-            continue;
-        }
     }
 }
 
