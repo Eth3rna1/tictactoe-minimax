@@ -48,6 +48,10 @@
 #include "../include/options.h"
 #include "../include/tictactoe.h"
 
+const int MAX_MINIMAX_DEPTH = 9;
+const bool X_IS_MAXIMIZER = true;
+const bool DEFAULT_REPLAY_RESPONSE = false;
+
 // game if multiplayer is chosen
 void multiPlayer() {
     TicTacToe game;
@@ -115,7 +119,7 @@ void soloPlayer() {
         } else { // ai player, which is X
             int _;
             std::optional<std::tuple<int, int>> best_move;
-            std::tie(_, best_move) = minimax(game, 9, true);
+            std::tie(_, best_move) = minimax(game, MAX_MINIMAX_DEPTH, X_IS_MAXIMIZER);
             if (!best_move.has_value()) {
                 continue;
             }
@@ -141,7 +145,7 @@ int main() {
         } else if (game_mode == "soloplayer") {
             soloPlayer();
         }
-        if (!confirmPrompt("Replay?", false)) {
+        if (!confirmPrompt("Replay?", DEFAULT_REPLAY_RESPONSE)) {
             break;
         }
     }
