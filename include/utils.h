@@ -2,7 +2,7 @@
 //
 // Author: Gabriel Mendieta Hernandez <gmendieta4109@gmail.com>
 //
-// Date: 2/21/2025
+// Date: 2/22/2025
 //
 // Description: This file contains minor functions
 //
@@ -73,7 +73,7 @@ Result<std::tuple<int, int>, std::string> parseInput(const std::string& response
     }
     int row = std::stoi(std::string(1, response[0]));
     if (1 > row || row > 3) {
-        return std::string("Invalid range: {1-3}");
+        return std::string("Invalid row: {1-3}");
     }
     int col;
     switch (std::tolower(response[1])) {
