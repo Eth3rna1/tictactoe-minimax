@@ -9,7 +9,7 @@
  *
  * Date Created: 2/17/2025
  *
- * Last Modified: 2/21/2025
+ * Last Modified: 2/22/2025
  *
  * Version: 0.0.1
  *
@@ -48,9 +48,9 @@
 #include "../include/options.h"
 #include "../include/tictactoe.h"
 
-const int MAX_MINIMAX_DEPTH = 9;
-const bool X_IS_MAXIMIZER = true;
-const bool DEFAULT_REPLAY_RESPONSE = false;
+constexpr int MAX_MINIMAX_DEPTH = 9;
+constexpr bool X_IS_MAXIMIZER = true;
+constexpr bool DEFAULT_REPLAY_RESPONSE = false;
 
 // game if multiplayer is chosen
 void multiPlayer() {
