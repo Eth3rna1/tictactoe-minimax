@@ -100,6 +100,9 @@ std::string getGameMode() {
     while (true) {
         std::cout << options.display() << std::endl;
         std::string choice = input("\nChoice: ");
+        if (choice.length() == 0) {
+            exit(0); // user most likely didn't intend to play
+        }
         std::optional<std::string> result = options.eval(choice);
         if (result.has_value()) {
             return result.value();
