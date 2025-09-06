@@ -17,8 +17,9 @@
 #ifndef OPTIONS_H
 #define OPTIONS_H
 
-#include <optional>
 #include <vector>
+#include <string>
+#include <optional>
 #include <unordered_map>
 
 // A class that works with the UI, listing all available
@@ -27,40 +28,16 @@ class Options {
     std::unordered_map<std::string, std::string> m_values;
 
 public:
-    Options(std::vector<std::string>& values) {
-        for (int i=0; i < values.size(); ++i) {
-            m_values[std::to_string(i + 1)] = values[i];
-        }
-    }
+    Options(const std::vector<std::string>& values);
 
     // Returns a UI for the user to
     // have all the clients options on a list
-    std::string display() const {
-        std::string buffer = "";
-        int size = m_values.size();
-        for (int i=0; i < size; ++i) {
-            std::string str_index = std::to_string(i + 1);
-            buffer += str_index + ".) " + m_values.at(str_index);
-            if (i < size - 1) {
-                buffer += '\n';
-            }
-        }
-        return buffer;
-    }
+    std::string display() const;
 
     // Evaluates user input `v` and matches the keys first,
     // returning the value corresponding to the key, if not, checks
     // for the values, if values match, returns such value
-    std::optional<std::string> eval(std::string v) {
-        for (const auto& pair : m_values) {
-            if (pair.first == v) {
-                return pair.second;
-            } else if (pair.second == v) {
-                return v;
-            }
-        }
-        return std::nullopt;
-    }
+    std::optional<std::string> eval(std::string v);
 };
 
 #endif
