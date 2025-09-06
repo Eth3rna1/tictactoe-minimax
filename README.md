@@ -13,9 +13,54 @@ git clone https://github.com/Eth3rna1/tictactoe-minimax.git
 ```console
 cd tictactoe-minimax
 ```
-* Locate the main file in `src/main.cpp` and compile
+
+## Installation
+
+### Prerequisites
+
+- [CMake](https://cmake.org/download/) (version 3.10 or higher)
+- A C++17-compatible compiler (e.g., MinGW-w64 for Windows)
+- (Optional) [Ninja](https://ninja-build.org/) or MinGW Makefiles for faster builds
+
+### Building on Windows
+
+1. **Clone the repository:**
+   ```console
+   git clone https://github.com/yourusername/tictactoe-minimax.git
+   cd tictactoe-minimax
+   ```
+
+2. **Create a build directory and navigate into it:**
+   ```console
+   mkdir build
+   cd build
+   ```
+
+3. **Generate build files with CMake:**
+   - For MinGW:
+     ```console
+     cmake -G "MinGW Makefiles" ..
+     ```
+   - Or for Ninja (if installed):
+     ```console
+     cmake -G "Ninja" ..
+     ```
+
+4. **Build the project:**
+   ```console
+   cmake --build .
+   ```
+
+5. **Run the executable:**
+   ```console
+   ./tictactoe.exe
+   ```
+
+### Compiling Directly With G++
+
+Include all implementation files in the compilation command.
 ```console
-g++ src/main.cpp -o tictactoe
+g++ src/minimax.cpp src/options.cpp src/tictactoe.cpp src/utils.cpp src/main.cpp -o tictactoe.exe
 ```
 
 ## Notes
